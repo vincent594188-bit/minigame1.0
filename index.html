@@ -105,6 +105,8 @@ imgload('b','6',6,5);
 imgload('b','7',1,5);
 imgload('b','8',3,5);
 imgload('b','9',1,5);
+imgload('b','10',4,5);
+imgload('b','11',3,5);
 imgload('bl','0',1,6);
 imgload('d','0',10,7);
 imgload('d','1',12,7);
@@ -132,7 +134,9 @@ var img_play =
         [[0,1,2,3,3,3,3,4,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5]],
         [[0]],
         [[0,0,1,1,2,2,2,2]],
-        [[0]]
+        [[0]],
+        [[0,1,2,3]],
+        [[0,1,2,2,2]]
     ]
 
 
@@ -409,6 +413,23 @@ function spawn(kind,id,x,y,angle,from){
             lives[lives.length-1].NoF=true;
             lives[lives.length-1].Reb=true;
         }
+        else if (id==10){
+            lives[lives.length-1].Bullet=false;
+            lives[lives.length-1].W=23;
+            lives[lives.length-1].H=40;
+            lives[lives.length-1].Hp=100;
+            lives[lives.length-1].Walk=false;
+            lives[lives.length-1].Wcd=0;
+        }
+        else if (id==11){
+            lives[lives.length-1].Bullet=false;
+            lives[lives.length-1].W=30;
+            lives[lives.length-1].H=30;
+            lives[lives.length-1].Hp=300;
+            lives[lives.length-1].Walk=false;
+            lives[lives.length-1].Wcd=0;
+            lives[lives.length-1].NoKb=true;
+        }
     }
     else if (kind=='g'){
         if (id==0){
@@ -568,10 +589,10 @@ function zombieAi(i,t,info){//Wcdl Speed
             }
             else{
                 if (lives[i].Angle==0){
-                    addF(i,0.5,info.Speed);
+                    addF(i,0.4+(info.Speed)*0.05,info.Speed);
                 }
                 else{
-                    addF(i,-0.5,info.Speed*-1);
+                    addF(i,-0.5-(info.Speed)*0.05,info.Speed*-1);
                 }
             }
 
@@ -799,7 +820,7 @@ function update(){
     for (var i=1;i<lives.length;i++){
         if (lives[i].Kind=='b'){
             if (lives[i].Id==0){
-                slimeAi(i,0,{Wcdl:25,JumpF:4,JumpG:6,Cooltime:25});
+                slimeAi(i,0,{Wcdl:25,JumpF:4,JumpG:6,Cooltime:40});
                 hitdmg(i,0,6,10,false,true);
             }
             else if(lives[i].Id==1){
@@ -917,6 +938,14 @@ function update(){
             else if(lives[i].Id==9){
                 arrowAi(i,{Antig:0,Speed:5});
                 hitdmg(i,0,4,15,true,true);
+            }
+            else if(lives[i].Id==10){
+                zombieAi(i,0,{Wcdl:20,Speed:8});
+                hitdmg(i,0,6,20,false,true);
+            }
+            if (lives[i].Id==11){
+                slimeAi(i,0,{Wcdl:25,JumpF:2,JumpG:3,Cooltime:20});
+                hitdmg(i,0,6,15,false,true);
             }
         }
         if (lives[i].Kind=='g'){
@@ -1057,9 +1086,28 @@ function update(){
             spawn('b',8,1775,1400,0,-1);
             
         }
-        else if (stage==11){
-            spawn('b',3,1775,1400,0,-1);
-            
+        else if (stage==11){  
+            spawn('b',10,1775,1500,0,-1);  
+            spawn('b',1,775,1500,0,-1);  
+        }
+        else if (stage==12){
+            spawn('b',11,1775,1500,0,-1);  
+            spawn('b',2,775,1050,0,-1); 
+            spawn('b',0,775,1500,0,-1); 
+        }
+        else if (stage==13){
+            spawn('b',11,1775,1500,0,-1);  
+            spawn('b',11,1875,1500,0,-1);  
+            spawn('b',11,1975,1500,0,-1);  
+            spawn('b',6,625,1500,0,-1);
+            spawn('b',6,575,1500,0,-1);
+        }
+        else if (stage==14){
+            spawn('b',11,1775,1500,0,-1);  
+            spawn('b',11,1875,1500,0,-1);  
+            spawn('b',11,1975,1500,0,-1);  
+            spawn('b',6,625,1500,0,-1);
+            spawn('b',6,575,1500,0,-1);
         }
     }
 
@@ -1157,7 +1205,12 @@ function update(){
             else if (lives[i].Id==9){
                 showtype=1;
             }
-
+            else if (lives[i].Id==10){
+                showcd=lives[i].Wcd;
+            }
+            else if (lives[i].Id==11){
+                showcd=lives[i].Wcd;
+            }
         }
         if (lives[i].Kind=='g'){
             dictspot=4;
